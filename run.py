@@ -30,11 +30,11 @@ def _simulate(args):
     traces = Dataset(args.dataset_idx).traces
 
     if args.model == 'saturating-counter':
-        from models.saturating_counter import SaturatingCounter
-        model = SaturatingCounter()
+        from models.saturating_counter import SaturatingCounterPredictor
+        model = SaturatingCounterPredictor()
     elif args.model == 'perceptron':
-        from models.perceptron import Perceptron
-        model = Perceptron(N=args.n_history)
+        from models.perceptron import PerceptronPredictor
+        model = PerceptronPredictor(N=args.n_history)
     elif args.model == 'constant':
         from models.constant import ConstantPredictor
         model = ConstantPredictor(1)

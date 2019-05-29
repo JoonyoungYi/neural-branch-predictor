@@ -1,7 +1,7 @@
 from collections import deque
 
 
-class MultiLayerPerceptron:
+class MultiLayerPerceptronPredictor:
     def __init__(self, N):
         traces = deque([])
         traces.extend([0] * N)

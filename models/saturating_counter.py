@@ -1,4 +1,4 @@
-class Counter:
+class _Counter:
     state = 2  # 1 and 2 predict do not take, 3 and 4 predict take
 
     def predict(self):
@@ -8,13 +8,13 @@ class Counter:
         self.state = min(max(self.state + (1 if taken else -1), 4), 1)
 
 
-class SaturatingCounter:
+class SaturatingCounterPredictor:
     def __init__(self):
         self.counter_dict = {}
 
     def _get_counter(self, register):
         counter_dict = self.counter_dict
-        return counter_dict.get(register, Counter())
+        return counter_dict.get(register, _Counter())
 
     def _put_counter(self, register, counter):
         self.counter_dict[register] = counter

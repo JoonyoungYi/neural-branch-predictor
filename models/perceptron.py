@@ -32,7 +32,7 @@ class _LocalPerceptron:
               str(self.weights))
 
 
-class Perceptron:
+class PerceptronPredictor:
     def __init__(self, N):
         traces = deque([])
         traces.extend([0] * N)
