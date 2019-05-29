@@ -1,8 +1,3 @@
-import pdb
-import os
-from collections import deque
-
-from models.saturating_counter import SaturatingCounter
 from dataset import Dataset
 from configs import TEST_SPLIT
 
@@ -16,8 +11,8 @@ def __get_prediction_accuracy(model, traces):
 
     n_correct = 0
     for register, taken in test_traces:
-        _taken = model.predict(register)
-        if _taken == taken:
+        taken_hat = model.predict(register)
+        if taken_hat == taken:
             n_correct += 1
         model.train(register, taken)
     return n_correct / len(test_traces)
@@ -25,7 +20,16 @@ def __get_prediction_accuracy(model, traces):
 
 def _simulate(args):
     traces = Dataset(args.dataset_idx).traces
-    model = SaturatingCounter()
+
+    if args.model == 'saturating-counter':
+        from models.saturating_counter import SaturatingCounter
+        model = SaturatingCounter()
+    elif args.model == 'perceptron':
+        from models.perceptron import Perceptron
+        model = Perceptron(N=8)
+    else:
+        raise NotImplementedError()
+
     accuracy = __get_prediction_accuracy(model, traces)
     print('%.5f' % accuracy)
 
@@ -36,6 +40,13 @@ def main():
     parser = argparse.ArgumentParser(description='neural-branch-predictor')
     parser.add_argument(
         '--dataset_idx', type=int, default=1, help='dataset_idx')
+    parser.add_argument(
+        '--model',
+        type=str,
+        # default="saturating-counter",
+        default="perceptron",
+        choices=["saturating-counter", "perceptron"],
+        help='model')
     args = parser.parse_args()
     _simulate(args)
 

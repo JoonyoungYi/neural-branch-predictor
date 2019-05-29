@@ -5,7 +5,7 @@ class Counter:
         return self.state < 3
 
     def train(self, taken):
-        self.state = min(max(self.state + 1 if taken else -1, 4), 1)
+        self.state = min(max(self.state + (1 if taken else -1), 4), 1)
 
 
 class SaturatingCounter:

@@ -14,6 +14,7 @@ class Dataset:
                 tokens = re.split('\s+', line.strip())
                 assert len(tokens) == 3
                 register = tokens[1]
-                taken = tokens[2] == '1'
+                taken = int(tokens[2])
+                assert taken == 0 or taken == 1
                 traces.append([register, taken])
         self.traces = traces
