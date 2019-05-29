@@ -26,7 +26,7 @@ def _simulate(args):
         model = SaturatingCounter()
     elif args.model == 'perceptron':
         from models.perceptron import Perceptron
-        model = Perceptron(N=8)
+        model = Perceptron(N=args.n_history)
     else:
         raise NotImplementedError()
 
@@ -39,14 +39,19 @@ def main():
 
     parser = argparse.ArgumentParser(description='neural-branch-predictor')
     parser.add_argument(
-        '--dataset_idx', type=int, default=1, help='dataset_idx')
+        '--dataset_idx', type=int, default=0, help='dataset_idx')
     parser.add_argument(
         '--model',
         type=str,
-        # default="saturating-counter",
-        default="perceptron",
+        default="saturating-counter",
+        # default="perceptron",
         choices=["saturating-counter", "perceptron"],
         help='model')
+    parser.add_argument(
+        '--n_history',
+        type=int,
+        default=8,
+        help='history length for perceptron model. Ignore in counter model.')
     args = parser.parse_args()
     _simulate(args)
 
