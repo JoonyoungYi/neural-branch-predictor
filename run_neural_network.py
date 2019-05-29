@@ -68,12 +68,15 @@ def __get_prediction_accuracy(model, traces, args):
     y = [taken for _, taken in traces]
 
     offset = int(len(traces) * (1 - TEST_SPLIT))
-    train_x = np.expand_dims(np.array(x[:offset]), axis=2)
-    # torch.FloatTensor(x[:offset]).unsqueeze(2).cuda()
-    train_y = np.array(y[:offset])  # torch.LongTensor(y[:offset]).cuda()
-    test_x = np.expand_dims(np.array(x[offset:]), axis=2)
-    #torch.FloatTensor(x[offset:]).unsqueeze(2).cuda()
-    test_y = np.array(y[offset:])  # torch.LongTensor(y[offset:]).cuda()
+
+    train_x = np.array(x[:offset])
+    if args.model == 'lstm':
+        train_x = np.expand_dims(train_x), axis=2)
+    train_y = np.array(y[:offset])
+    test_x = np.array(x[offset:])
+    if args.model == 'lstm':
+        test_x = np.expand_dims(test_x), axis=2)
+    test_y = np.array(y[offset:])
 
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-2)
