@@ -71,11 +71,11 @@ def __get_prediction_accuracy(model, traces, args):
 
     train_x = np.array(x[:offset])
     if args.model == 'lstm':
-        train_x = np.expand_dims(train_x), axis=2)
+        train_x = np.expand_dims(train_x, axis=2)
     train_y = np.array(y[:offset])
     test_x = np.array(x[offset:])
     if args.model == 'lstm':
-        test_x = np.expand_dims(test_x), axis=2)
+        test_x = np.expand_dims(test_x, axis=2)
     test_y = np.array(y[offset:])
 
     criterion = nn.CrossEntropyLoss()
