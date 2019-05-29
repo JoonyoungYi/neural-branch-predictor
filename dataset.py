@@ -22,12 +22,15 @@ class Dataset:
         with open(os.path.join('datasets', filename), 'r') as f:
             for line in f:
                 line = line.strip()
+                if not line:
+                    continue
+
                 tokens = re.split('\s+', line)
                 if len(tokens) != 2:
-                    if not line:
-                        continue
                     print(tokens)
-                    raise Exception("len(tokens) is not 2.")
+                    input('')
+                    # raise Exception("len(tokens) is not 2.")
+                    continue
                 register = tokens[0]
                 taken = int(tokens[1])
                 assert taken == 0 or taken == 1
