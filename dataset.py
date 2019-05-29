@@ -25,7 +25,7 @@ class Dataset:
                 if not line:
                     continue
 
-                if len(line) != 11:
+                if len(line) != 10:
                     continue
 
                 tokens = re.split('\s+', line)
