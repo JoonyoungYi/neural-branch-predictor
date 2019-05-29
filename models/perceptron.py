@@ -13,20 +13,19 @@ class _LocalPerceptron:
         self.threshold = 2 * N + 14  # optimal threshold depends on history length
         self.weights = [0] * N
 
-    def predict(self, global_trace_history):
+    def predict(self, traces):
         running_sum = self.bias
         for i in range(
                 0, self.N):  # dot product of trace history with the weights
-            running_sum += global_trace_history[i] * self.weights[i]
+            running_sum += traces[i] * self.weights[i]
         prediction = -1 if running_sum < 0 else 1
         return (prediction, running_sum)
 
-    def train(self, prediction, actual, global_trace_history, running_sum):
+    def train(self, prediction, actual, traces, running_sum):
         if (prediction != actual) or (abs(running_sum) < self.threshold):
             self.bias = self.bias + (1 * actual)
             for i in range(0, self.N):
-                self.weights[
-                    i] = self.weights[i] + (actual * global_trace_history[i])
+                self.weights[i] = self.weights[i] + (actual * traces[i])
 
     def statistics(self):
         print("bias is: " + str(self.bias) + " weights are: " +
@@ -35,10 +34,10 @@ class _LocalPerceptron:
 
 class Perceptron:
     def __init__(self, N):
-        global_trace_history = deque([])
-        global_trace_history.extend([0] * N)
+        traces = deque([])
+        traces.extend([0] * N)
 
-        self.global_trace_history = global_trace_history
+        self.traces = traces
         self.local_perceptron_dict = {}
         self.N = N
 
@@ -50,24 +49,23 @@ class Perceptron:
         self.local_perceptron_dict[register] = local_perceptron
 
     def train(self, register, taken):
-        global_trace_history = self.global_trace_history
+        traces = self.traces
 
         local_perceptron = self._get_local_perceptron(register)
-        taken_pred, running_sum = local_perceptron.predict(
-            global_trace_history)
+        taken_pred, running_sum = local_perceptron.predict(traces)
 
-        local_perceptron.train(taken_pred, 1 if taken else -1, global_trace_history, running_sum)
+        local_perceptron.train(taken_pred, 1
+                               if taken else -1, traces, running_sum)
 
-        global_trace_history.appendleft(1 if taken else -1)
-        global_trace_history.pop()
+        traces.appendleft(1 if taken else -1)
+        traces.pop()
 
         self._put_local_perceptron(register, local_perceptron)
-        self.global_trace_history = global_trace_history
+        self.traces = traces
 
     def predict(self, register):
-        global_trace_history = self.global_trace_history
+        traces = self.traces
 
         local_perceptron = self._get_local_perceptron(register)
-        taken_pred, running_sum = local_perceptron.predict(
-            global_trace_history)
-        return taken_pred
+        taken_pred, running_sum = local_perceptron.predict(traces)
+        return max(taken_pred, 0)
