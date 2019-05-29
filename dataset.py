@@ -21,8 +21,11 @@ class Dataset:
         traces = []
         with open(os.path.join('datasets', filename), 'r') as f:
             for line in f:
-                tokens = re.split('\s+', line.strip())
+                line = line.strip()
+                tokens = re.split('\s+', line)
                 if len(tokens) != 2:
+                    if not line:
+                        continue
                     print(tokens)
                     raise Exception("len(tokens) is not 2.")
                 register = tokens[0]
