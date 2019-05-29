@@ -25,6 +25,9 @@ class Dataset:
                 if not line:
                     continue
 
+                if len(line) != 11:
+                    continue
+
                 tokens = re.split('\s+', line)
                 if len(tokens) != 2:
                     print(tokens)

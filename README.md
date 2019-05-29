@@ -20,14 +20,14 @@ cd /home/server18/neural-branch-predictor
 ```
 
 ## a
-0 : server8-0
+0: server8-0
 1: server8-1
 2: server8-2
 3: server8-3
-4
-5
+4: server18-1
+5: server18-
 6: server18-0
-7: server18-1
+7: server18-
 
 
 ## References
