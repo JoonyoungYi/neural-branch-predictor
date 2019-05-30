@@ -5,6 +5,7 @@
 
 ```
 python run_neural_network.py --model=mlp --dataset_idx=2
+python run_baseline.py --model=mlp --dataset_idx=2
 ```
 
 * Environment
