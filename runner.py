@@ -27,7 +27,7 @@ def __get_prediction_accuracy(model, traces):
     # print(">> running (sec):", time.time() - start_time)
     # print(results)
     # input('')
-    return n_correct / len(traces)
+    return n_correct / len(traces), time.time() - start_time
 
 
 def _simulate(args):
@@ -48,8 +48,17 @@ def _simulate(args):
     else:
         raise NotImplementedError()
 
-    accuracy = __get_prediction_accuracy(model, traces)
+    accuracy, time = __get_prediction_accuracy(model, traces)
     print('>> accuracy     :', '%.8f' % accuracy)
+
+    f = open('results/{}.tsv'.format(args.model), 'a')
+    results = []
+    results.append(args.dataset_idx)
+    results.append(args.n_history)
+    results.append(accuracy)
+    results.append(time)
+    f.write('\t'.join([str(r) for r in results]) + '\n')
+    f.close()
 
 
 def main():
@@ -70,7 +79,7 @@ def main():
     parser.add_argument(
         '--n_history',
         type=int,
-        default=1024,
+        default=1,
         help='history length for perceptron model. Ignore in counter model.')
     args = parser.parse_args()
     _simulate(args)
