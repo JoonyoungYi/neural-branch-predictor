@@ -38,4 +38,7 @@ class Dataset:
                 taken = int(tokens[1])
                 assert taken == 0 or taken == 1
                 traces.append([register, taken])
+
+                if len(traces) >= 100000:
+                    break
         self.traces = traces

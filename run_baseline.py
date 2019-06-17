@@ -7,30 +7,27 @@ except:
     tqdm = lambda x: x
 
 from dataset import Dataset
-from configs import TEST_SPLIT
 
 
 def __get_prediction_accuracy(model, traces):
-    train_traces = traces[:int(len(traces) * (1 - TEST_SPLIT))]
-    test_traces = traces[int(len(traces) * (1 - TEST_SPLIT)):]
 
     start_time = time.time()
-    for register, taken in tqdm(train_traces):
-        model.train(register, taken)
-    print(">> training(sec):", time.time() - start_time)
-
     n_correct = 0
-    start_time = time.time()
-    for register, taken in tqdm(test_traces):
+    results = []
+    for register, taken in tqdm(traces):
         taken_hat = model.predict(register)
         assert taken_hat == 0 or taken_hat == 1
+
         if taken_hat == taken:
             n_correct += 1
+        results.append(1 if taken_hat == taken else 0)
 
         model.train(register, taken)
-    print(">> testing (sec):", time.time() - start_time)
 
-    return n_correct / len(test_traces)
+    # print(">> running (sec):", time.time() - start_time)
+    # print(results)
+    # input('')
+    return n_correct / len(traces)
 
 
 def _simulate(args):
@@ -42,6 +39,9 @@ def _simulate(args):
     elif args.model == 'perceptron':
         from models.perceptron import PerceptronPredictor
         model = PerceptronPredictor(N=args.n_history)
+    elif args.model == 'winnow':
+        from models.winnow import WinnowPredictor
+        model = WinnowPredictor(N=args.n_history)
     elif args.model == 'constant':
         from models.constant import ConstantPredictor
         model = ConstantPredictor(1)
@@ -61,15 +61,16 @@ def main():
     parser.add_argument(
         '--model',
         type=str,
-        default="saturating-counter",
+        # default="saturating-counter",
         # default="perceptron",
+        default="winnow",
         # default="constant",
-        choices=["saturating-counter", "perceptron", "constant"],
+        choices=["saturating-counter", "perceptron", "constant", "winnow"],
         help='model')
     parser.add_argument(
         '--n_history',
         type=int,
-        default=8,
+        default=1024,
         help='history length for perceptron model. Ignore in counter model.')
     args = parser.parse_args()
     _simulate(args)

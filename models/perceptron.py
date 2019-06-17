@@ -34,7 +34,7 @@ class _LocalPerceptron:
 
 class PerceptronPredictor:
     def __init__(self, N):
-        traces = deque([])
+        traces = deque([], maxlen=N)
         traces.extend([0] * N)
 
         self.traces = traces
@@ -58,7 +58,6 @@ class PerceptronPredictor:
                                if taken else -1, traces, running_sum)
 
         traces.appendleft(1 if taken else -1)
-        traces.pop()
 
         self._put_local_perceptron(register, local_perceptron)
         self.traces = traces

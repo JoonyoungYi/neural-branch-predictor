@@ -17,6 +17,7 @@ perceptron (depth 32)  0.98471             0.91196
 sudo docker run --runtime=nvidia -it -v /home:/home laoconeth/pytorch:ubuntu16.04.5_torch1.0.0_cuda10.0 /bin/bash
 
 cd /home/joonyoung/temp/neural-branch-predictor
+cd /home/server16/neural-branch-predictor && export CUDA_VISIBLE_DEVICES=0
 cd /home/server17/neural-branch-predictor && export CUDA_VISIBLE_DEVICES=0
 cd /home/server18/neural-branch-predictor
 
